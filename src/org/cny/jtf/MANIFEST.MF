@@ -1,0 +1,6 @@
+Manifest-Version: 0.1.0
+Ant-Version: Apache Ant 1.7.1
+Created-By: Cny
+Main-Class: org.cny.jtf.main.ExportData
+Class-Path: . lib/*.jar
+

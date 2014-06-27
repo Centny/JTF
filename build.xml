@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="JTF" basedir="." default="main">
+    <property environment="env"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="out.dir" value="out"/>
+    <property name="classes.dir" value="${out.dir}/classes"/>
+    <property name="src.dir" value="src"/>
+    <path id="app.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+    <target name="clear">
+        <delete dir="${out.dir}"/>
+        <mkdir dir="${out.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+    </target>
+    <!-- 编译 -->
+    <target name="compile" depends="clear">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="no"
+               deprecation="true" encoding="utf-8">
+            <compilerarg value="-Xlint:unchecked"/>
+            <classpath refid="app.classpath"/>
+        </javac>
+        <copy overwrite="true" todir="${classes.dir}">
+            <fileset dir="${src.dir}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <!-- 开始打包 -->
+    <!-- 公共模块打包 -->
+    <target name="jutil.jar" depends="compile">
+        <mkdir dir="${out.dir}/jutil"/>
+        <!--copy the file to the tmp dire -->
+        <copy overwrite="true" todir="${out.dir}/jutil">
+            <fileset dir="${classes.dir}">
+                <include name="**/util/**/*"/>
+                <exclude name="**/test/**/*"/>
+                <exclude name="**/jtf/**/*"/>
+            </fileset>
+            <fileset dir="${src.dir}">
+                <include name="**/util/**/*"/>
+                <exclude name="**/test/**/*"/>
+                <exclude name="**/jtf/**/*"/>
+            </fileset>
+        </copy>
+        <jar destfile="${out.dir}/jutil-0.1.0.jar"
+             basedir="${out.dir}/jutil">
+        </jar>
+    </target>
+
+    <!-- ETF -->
+    <target name="jtf.jar" depends="jutil.jar">
+        <mkdir dir="${out.dir}/jtf"/>
+        <!--copy the file to the tmp dire -->
+        <copy overwrite="true" todir="${out.dir}/jtf">
+            <fileset dir="${classes.dir}">
+                <include name="**/jtf/**/*"/>
+                <exclude name="**/test/**/*"/>
+                <exclude name="**/util/**/*"/>
+            </fileset>
+            <fileset dir="${src.dir}">
+                <include name="**/jtf/**/*"/>
+                <exclude name="**/test/**/*"/>
+                <exclude name="**/util/**/*"/>
+            </fileset>
+        </copy>
+        <jar destfile="${out.dir}/jtf-0.1.0.jar"
+             manifest="src/org/cny/jtf/MANIFEST.MF"
+             basedir="${out.dir}/jtf">
+        </jar>
+    </target>
+
+    <!-- 工程起点 -->
+    <target name="main" depends="jtf.jar">
+        <echo message="****************************************"/>
+        <echo message="*** This is the end of project build ***"/>
+        <echo message="****************************************"/>
+    </target>
+</project>
