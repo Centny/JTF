@@ -70,6 +70,28 @@
              manifest="src/org/cny/jtf/MANIFEST.MF"
              basedir="${out.dir}/jtf">
         </jar>
+        <mkdir dir="${out.dir}/jtf_p"/>
+        <mkdir dir="${out.dir}/jtf_p/lib"/>
+        <copy overwrite="true" todir="${out.dir}/jtf_p/lib">
+            <fileset dir="${lib.dir}">
+                <include name="poi*"/>
+                <include name="dbunit*"/>
+                <include name="ojdbc*"/>
+                <include name="slf4j*"/>
+                <include name="log4j*"/>
+            </fileset>
+        </copy>
+        <copy overwrite="true" todir="${out.dir}/jtf_p">
+            <fileset dir="${src.dir}/org/cny/jtf/help"/>
+        </copy>
+        <copy overwrite="true" todir="${out.dir}/jtf_p">
+            <fileset dir="${out.dir}">
+                <filename name="jtf-0.1.0.jar"/>
+            </fileset>
+        </copy>
+        <jar destfile="${out.dir}/jtf-0.1.0.zip"
+             basedir="${out.dir}/jtf_p">
+        </jar>
     </target>
 
     <!-- 工程起点 -->

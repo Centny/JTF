@@ -150,7 +150,7 @@ public class Etf<T> extends BaseSessionBeanJUnit4Fixture<T> {
      * @return Properties.
      * @throws IOException
      */
-    private Properties loadEtf() throws IOException {
+    private Properties loadJtf() throws IOException {
         Properties etf = new Properties();
         InputStream in = this.getClass().getClassLoader().getResourceAsStream("jtf.properties");
         if (in != null) {
@@ -166,7 +166,7 @@ public class Etf<T> extends BaseSessionBeanJUnit4Fixture<T> {
      * @throws IOException
      */
     private String loadSchema() throws IOException {
-        return this.loadEtf().getProperty("jtf.schema");
+        return this.loadJtf().getProperty("jtf.schema");
     }
 
     /**
