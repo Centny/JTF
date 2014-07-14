@@ -2,6 +2,9 @@ package org.cny.util;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * @author Centny
@@ -33,6 +36,24 @@ public final class JndiTools {
         }
     }
 
+    /**
+     * get the data source.
+     *
+     * @return DataSource.
+     */
+    public static DataSource ds() {
+        try {
+            InitialContext ic = new InitialContext();
+            String jndi = SystemConfig.Cfg().getProperty("DS_N");
+            return (DataSource) ic.lookup(jndi);
+        } catch (final NamingException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    public static Connection connection() throws SQLException {
+        return ds().getConnection();
+    }
 //    public static <T> T remote(final String name, final Class<T> remote) {
 //        if (name == null || name.trim().isEmpty()) {
 //            throw new IllegalArgumentException("the jndi name is null  or empty");

@@ -5,6 +5,9 @@
     <property name="out.dir" value="out"/>
     <property name="classes.dir" value="${out.dir}/classes"/>
     <property name="src.dir" value="src"/>
+    <property name="lib.jtf.ver" value="0.1.1"/>
+    <property name="lib.eutil.ver" value="0.1.2"/>
+    <property name="author" value="cny"/>
     <path id="app.classpath">
         <fileset dir="${lib.dir}">
             <include name="**/*.jar"/>
@@ -17,7 +20,7 @@
     </target>
     <!-- 编译 -->
     <target name="compile" depends="clear">
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="no"
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="true"
                deprecation="true" encoding="utf-8">
             <compilerarg value="-Xlint:unchecked"/>
             <classpath refid="app.classpath"/>
@@ -30,10 +33,10 @@
     </target>
     <!-- 开始打包 -->
     <!-- 公共模块打包 -->
-    <target name="jutil.jar" depends="compile">
-        <mkdir dir="${out.dir}/jutil"/>
+    <target name="eutil.jar" depends="compile">
+        <mkdir dir="${out.dir}/eutil"/>
         <!--copy the file to the tmp dire -->
-        <copy overwrite="true" todir="${out.dir}/jutil">
+        <copy overwrite="true" todir="${out.dir}/eutil">
             <fileset dir="${classes.dir}">
                 <include name="**/util/**/*"/>
                 <exclude name="**/test/**/*"/>
@@ -45,13 +48,13 @@
                 <exclude name="**/jtf/**/*"/>
             </fileset>
         </copy>
-        <jar destfile="${out.dir}/jutil-0.1.0.jar"
-             basedir="${out.dir}/jutil">
+        <jar destfile="${out.dir}/eutil-${author}-${lib.eutil.ver}.jar"
+             basedir="${out.dir}/eutil">
         </jar>
     </target>
 
     <!-- ETF -->
-    <target name="jtf.jar" depends="jutil.jar">
+    <target name="jtf.jar" depends="eutil.jar">
         <mkdir dir="${out.dir}/jtf"/>
         <!--copy the file to the tmp dire -->
         <copy overwrite="true" todir="${out.dir}/jtf">
@@ -66,7 +69,7 @@
                 <exclude name="**/util/**/*"/>
             </fileset>
         </copy>
-        <jar destfile="${out.dir}/jtf-0.1.0.jar"
+        <jar destfile="${out.dir}/jtf-${author}-${lib.jtf.ver}.jar"
              manifest="src/org/cny/jtf/MANIFEST.MF"
              basedir="${out.dir}/jtf">
         </jar>
@@ -86,10 +89,10 @@
         </copy>
         <copy overwrite="true" todir="${out.dir}/jtf_p">
             <fileset dir="${out.dir}">
-                <filename name="jtf-0.1.0.jar"/>
+                <filename name="jtf-${lib.jtf.ver}.jar"/>
             </fileset>
         </copy>
-        <jar destfile="${out.dir}/jtf-0.1.0.zip"
+        <jar destfile="${out.dir}/jtf-${author}-${lib.jtf.ver}.zip"
              basedir="${out.dir}/jtf_p">
         </jar>
     </target>

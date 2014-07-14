@@ -40,6 +40,8 @@
     <orderEntry type="library" name="javax.servlet_3.0.0.v201112011016" level="project" />
     <orderEntry type="library" name="javax.servlet.jsp_2.0.0.v201101211617" level="project" />
     <orderEntry type="library" name="struts2-json-plugin-2.3.16.3" level="project" />
+    <orderEntry type="library" name="poi-3.10-FINAL-20140208" level="project" />
+    <orderEntry type="library" name="dbunit-2.5.0" level="project" />
   </component>
 </module>
 

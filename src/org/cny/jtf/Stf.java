@@ -70,7 +70,7 @@ public class Stf<T> extends StrutsJUnit4TestCase<T> {
      * @throws Exception throwing the exception when import data error.
      */
     public void importData(String path) throws Exception {
-        this.importData(path);
+        this.etf.importData(path);
     }
 
     /**
