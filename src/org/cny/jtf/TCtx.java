@@ -33,6 +33,7 @@ public class TCtx {
     }
 
     static EJBContainer C;
+    static Context CTX;
 
     public static EJBContainer Ctn() {
         if (C == null) {
@@ -43,7 +44,10 @@ public class TCtx {
     }
 
     public static Context Ctx() {
-        return Ctn().getContext();
+        if (CTX == null) {
+            CTX = Ctn().getContext();
+        }
+        return CTX;
     }
 
     public static final void initCtx(Object o) {

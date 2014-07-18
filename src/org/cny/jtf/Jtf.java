@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import javax.transaction.UserTransaction;
@@ -50,6 +51,14 @@ public class Jtf extends StrutsJTC<ZAction> {
                 Jtf.this.tx = res.getTx();
             }
         });
+    }
+
+    public void bind(Object t) {
+        try {
+            new InitialContext().bind("inject", t);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -2,14 +2,17 @@ package org.cny.test;
 
 
 import com.opensymphony.xwork2.ActionProxy;
-import org.cny.jtf.ExportData;
-import org.cny.jtf.Jtf;
-import org.cny.jtf.TCtx;
+import org.apache.openejb.api.LocalClient;
+import org.cny.jtf.*;
+import org.cny.jtf.z.ZLocal;
+import org.cny.util.JndiTools;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.annotation.ManagedBean;
+import javax.ejb.EJB;
+import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.File;
@@ -20,6 +23,7 @@ import java.util.List;
 /**
  * @author Centny.
  */
+@LocalClient
 public class JtfTest extends Jtf {
 
     @Before
@@ -88,37 +92,84 @@ public class JtfTest extends Jtf {
         } catch (Exception e) {
 
         }
+    }
 
+    //    @PersistenceContext
+//    private EntityManager emm;
+////
+//    @EJB
+//    ZLocal z;
+//
+//    @Before
+//    public void bbbbb() {
+//        TCtx.initCtx(this);
+//    }
+
+//    @Test
+//    public void testNormal2() throws Exception {
+////        z.show();
+//    }
+
+    //
+//
+    //    private EntityManager emm;
+////
+    @EJB
+    ZLocal z;
+
+    @Test
+    public void testNormal3() throws Exception {
+        try {
+            TCtx.loadCFG("jjjjj");
+        } catch (Exception e) {
+
+        }
+        TCtx.loadCFG("jtf.properties");
+        //
+        this.bind(this);
         this.begin();
+        z.show();
         this.commit();
         try {
             this.begin();
             this.begin();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         try {
             this.tx.commit();
             this.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.begin();
+        this.commit();
+        try {
+            this.bind(null);
+        } catch (Exception e) {
+
+        }
+        TCtx.initCtx(this);
+        try {
+            TCtx.initCtx(null);
         } catch (Exception e) {
 
         }
     }
 
     @Test
-    public void testNormal2() throws Exception {
+    public void testJndi() throws Exception {
+        JndiTools.tools();
+
         try {
-            TCtx.initCtx(new Object());
+            JndiTools.local("jjjjj");
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
-        TCtx.initCtx(new TestA());
-        TCtx.loadCFG("jjjjj");
-    }
-
-    @ManagedBean
-    public static class TestA {
-        @PersistenceContext
-        EntityManager em;
+        try {
+            JndiTools.local(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

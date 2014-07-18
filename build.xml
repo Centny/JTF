@@ -34,9 +34,6 @@
         <mkdir dir="${reports.xml.dir}"/>
         <mkdir dir="${reports.html.dir}"/>
         <mkdir dir="${emma.dir}"/>
-        <mkdir dir="${web.dir}"/>
-        <mkdir dir="${web.dir}/WEB-INF/classes"/>
-        <mkdir dir="${web.dir}/WEB-INF/lib"/>
     </target>
 
     <target name="compile" depends="init">
@@ -53,8 +50,10 @@
     <target name="pub.jar" depends="compile">
         <mkdir dir="${build.dir}/pkg"/>
         <mkdir dir="${build.dir}/pkg/META-INF"/>
-        <copy todir="${build.dir}/pkg/META-INF">
-            <file file="src/META-INF/ejb-jar.xml"/>
+        <copy todir="${build.dir}/pkg/META-INF" overwrite="true">
+            <fileset dir="src/META-INF">
+                <include name="ejb-jar.xml"/>
+            </fileset>
         </copy>
         <copy todir="${build.dir}/pkg">
             <fileset dir="${classes.dir}">
@@ -87,7 +86,7 @@
                    destdir="${instrumented.dir}"
                    metadatafile="${emma.dir}/metadata.emma"
                    merge="true">
-                <filter value="-*.test.*"/>
+                <filter value="-*.main.* -*.test.* -*.DefaultResourceLoader -*.Tables* -*.DatabaseProfile"/>
             </instr>
         </emma>
         <copy todir="${classes.dir}" overwrite="true">
@@ -127,23 +126,13 @@
 
     <target name="coverage-report" depends="test">
         <emma enabled="${emma.enabled}">
-            <report sourcepath="${src.dir}"
-                    sort="+block,+name,+method,+class"
+            <report sourcepath="${src.dir}" sort="+block,+name,+method,+class"
                     metrics="method:70,block:80,line:80,class:100"
                     >
-                <!-- collect all EMMA data dumps (metadata and runtime)
-                     [this can be done via nested <fileset> fileset elements
-                     or <file> elements pointing to a single file]:
-                -->
                 <fileset dir="${emma.dir}">
                     <include name="*.emma"/>
                 </fileset>
 
-                <!-- for every type of report desired, configure a nested
-                     element; various report parameters
-                     can be inherited from the parent <report>
-                     and individually overridden for each report type:
-                -->
                 <txt outfile="${emma.dir}/coverage.txt"
                      depth="package"
                      columns="class,method,block,line,name"
