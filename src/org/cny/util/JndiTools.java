@@ -28,7 +28,7 @@ public final class JndiTools {
             Object facade = null;
             String jndi = "";
             ic = new InitialContext();
-            jndi = SystemConfig.Cfg().getProperty("JNDI_N") + name;
+            jndi = SystemConfig.Cfg().getProperty("JNDI_N").replace("$(NAME)", name);
             facade = ic.lookup(jndi);
             return (T) facade;
         } catch (final NamingException e) {

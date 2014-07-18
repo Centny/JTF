@@ -1,15 +1,11 @@
 package org.cny.jtf;
 
-import java.sql.SQLException;
-
 import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITable;
-import org.dbunit.dataset.ITableIterator;
-import org.dbunit.dataset.ITableMetaData;
+import org.dbunit.dataset.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.SQLException;
 
 /**
  * The tables data set class
@@ -31,7 +27,7 @@ public class TablesDataSet implements IDataSet {
      * the default constructor.
      *
      * @throws java.sql.SQLException
-     * @throws DataSetException
+     * @throws org.dbunit.dataset.DataSetException
      */
     public TablesDataSet(String targets, IDatabaseConnection dc)
             throws DataSetException, SQLException {

@@ -1,0 +1,22 @@
+<component name="libraryTable">
+  <library name="asm-4.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/asm-4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/asm-analysis-4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/asm-commons-4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/asm-tree-4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/asm-util-4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/cglib-nodep-3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/icu4j-2.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/jaxen-1.1-beta-8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/jdom-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/log4j-1.2.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/oro-2.0.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/tagsoup-0.9.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/xmlParserAPIs-2.6.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cobertura/lib/xom-1.0b3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,13 +1,13 @@
 package org.cny.jtf.main;
 
+import org.cny.jtf.DatabaseProfile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import org.cny.jtf.DatabaseProfile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * the main class for export data for database.
@@ -42,17 +42,17 @@ public class ExportData {
                     this.xlsFilePath = args[++i];
                     i++;
                 } else {
-                    org.cny.jtf.main.ExportData.help();
+                    ExportData.help();
                 }
             }
             if (this.profilePath == null || this.xlsFilePath == null) {
-                org.cny.jtf.main.ExportData.help();
+                ExportData.help();
             }
             this.log.info("the profile path:" + this.profilePath);
             this.log.info("the XLS file path:" + this.xlsFilePath);
             this.export();
         } else {
-            org.cny.jtf.main.ExportData.help();
+            ExportData.help();
         }
     }
 

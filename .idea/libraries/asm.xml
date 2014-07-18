@@ -7,8 +7,6 @@
       <root url="jar://$PROJECT_DIR$/lib/commons-fileupload.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/commons-io.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/commons-lang.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/dbunit-2.4.8.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/ejb3unit-2.0.0-kzz.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/freemarker.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/javassist.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/javax.ejb-api.jar!/" />
@@ -18,15 +16,12 @@
       <root url="jar://$PROJECT_DIR$/lib/log4j-over-slf4j-1.5.5.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/ognl.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/ojdbc7.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/poi-3.2-FINAL-20081019.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.5.5.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/slf4j-log4j12-1.5.5.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/struts2-core.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/xwork-core.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$PROJECT_DIR$/lib/ejb3unit-2.0.0-kzz.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

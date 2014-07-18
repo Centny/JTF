@@ -7,7 +7,7 @@ import javax.persistence.PersistenceContext;
 /**
  * @author Centny.
  */
-@Stateless
+@Stateless(name = "Sample")
 public class SampleFacade implements SampleLocal {
 
     @PersistenceContext

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="OpenEJB">
+    <CLASSES>
+      <root url="file://$USER_HOME$/Pkg/apache-openejb-4.6.0.2/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$USER_HOME$/Pkg/apache-openejb-4.6.0.2/lib" recursive="false" />
+  </library>
+</component>

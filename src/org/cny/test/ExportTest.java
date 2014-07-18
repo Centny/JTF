@@ -1,16 +1,16 @@
 package org.cny.test;
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-
 import org.cny.jtf.DatabaseProfile;
 import org.junit.Test;
 
-import static org.cny.jtf.ExportData.*;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import static org.cny.jtf.ExportData.exportData;
 
 /**
- * @author Centny.
- */
+* @author Centny.
+*/
 public class ExportTest {
 
     @Test
@@ -19,12 +19,12 @@ public class ExportTest {
         InputStream is;
         DatabaseProfile dp;
         FileOutputStream of;
-        is = EtfTest.class.getResourceAsStream("profile.properties");
+        is = JtfTest.class.getResourceAsStream("profile.properties");
         dp = new DatabaseProfile().load(is);
         of = new FileOutputStream(xls + "DB.xls");
         exportData(dp, of);
         of.close();
-        is = EtfTest.class.getResourceAsStream("profile2.properties");
+        is = JtfTest.class.getResourceAsStream("profile2.properties");
         dp = new DatabaseProfile().load(is);
         of = new FileOutputStream(xls + "DB2.xls");
         exportData(dp, of);

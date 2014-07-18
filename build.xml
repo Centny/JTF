@@ -1,104 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="JTF" basedir="." default="main">
-    <property environment="env"/>
-    <property name="lib.dir" value="lib"/>
-    <property name="out.dir" value="out"/>
-    <property name="classes.dir" value="${out.dir}/classes"/>
-    <property name="src.dir" value="src"/>
-    <property name="lib.jtf.ver" value="0.1.1"/>
-    <property name="lib.eutil.ver" value="0.1.2"/>
-    <property name="author" value="cny"/>
-    <path id="app.classpath">
-        <fileset dir="${lib.dir}">
-            <include name="**/*.jar"/>
+
+<project name="JTF" default="main" basedir=".">
+
+    <property file="build.properties"/>
+    <property name="emma.filter" value=""/>
+    <property name="emma.enabled" value="true"/>
+    <path id="emma.classpath">
+        <fileset dir="lib/emma">
+            <include name="*.jar"/>
         </fileset>
     </path>
-    <target name="clear">
-        <delete dir="${out.dir}"/>
-        <mkdir dir="${out.dir}"/>
+    <path id="test.classpath">
+        <fileset dir="${test.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    <path id="app.classpath">
+        <fileset dir="${app.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    <path id="run.classpath">
+        <pathelement location="${classes.dir}"/>
+    </path>
+    <tstamp>
+        <format property="now.v" pattern="yyyyMMdd" locale="en,US"/>
+    </tstamp>
+    <taskdef resource="emma_ant.properties" classpathref="emma.classpath"/>
+
+    <target name="init">
         <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${instrumented.dir}"/>
+        <mkdir dir="${reports.xml.dir}"/>
+        <mkdir dir="${reports.html.dir}"/>
+        <mkdir dir="${emma.dir}"/>
+        <mkdir dir="${web.dir}"/>
+        <mkdir dir="${web.dir}/WEB-INF/classes"/>
+        <mkdir dir="${web.dir}/WEB-INF/lib"/>
     </target>
-    <!-- 编译 -->
-    <target name="compile" depends="clear">
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="true"
-               deprecation="true" encoding="utf-8">
-            <compilerarg value="-Xlint:unchecked"/>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="yes" includeantruntime="on">
+            <classpath refid="test.classpath"/>
             <classpath refid="app.classpath"/>
         </javac>
-        <copy overwrite="true" todir="${classes.dir}">
-            <fileset dir="${src.dir}">
+        <copy todir="${classes.dir}">
+            <fileset dir="src">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
     </target>
-    <!-- 开始打包 -->
-    <!-- 公共模块打包 -->
-    <target name="eutil.jar" depends="compile">
-        <mkdir dir="${out.dir}/eutil"/>
-        <!--copy the file to the tmp dire -->
-        <copy overwrite="true" todir="${out.dir}/eutil">
+    <target name="pub.jar" depends="compile">
+        <mkdir dir="${build.dir}/pkg"/>
+        <mkdir dir="${build.dir}/pkg/META-INF"/>
+        <copy todir="${build.dir}/pkg/META-INF">
+            <file file="src/META-INF/ejb-jar.xml"/>
+        </copy>
+        <copy todir="${build.dir}/pkg">
             <fileset dir="${classes.dir}">
-                <include name="**/util/**/*"/>
-                <exclude name="**/test/**/*"/>
-                <exclude name="**/jtf/**/*"/>
-            </fileset>
-            <fileset dir="${src.dir}">
-                <include name="**/util/**/*"/>
-                <exclude name="**/test/**/*"/>
-                <exclude name="**/jtf/**/*"/>
+                <include name="**/main/ExportData.class"/>
+                <include name="**/help/*"/>
+                <include name="**/z/**/*"/>
+                <include name="**/jtf/*"/>
+                <include name="**/util/*"/>
             </fileset>
         </copy>
-        <jar destfile="${out.dir}/eutil-${author}-${lib.eutil.ver}.jar"
-             basedir="${out.dir}/eutil">
-        </jar>
+        <copy todir="${build.dir}/pkg">
+            <fileset dir="${src.dir}">
+                <include name="**/main/ExportData.java"/>
+                <include name="**/help/*"/>
+                <include name="**/z/**/*"/>
+                <include name="**/jtf/*"/>
+                <include name="**/util/*"/>
+            </fileset>
+        </copy>
+        <jar basedir="${build.dir}/pkg" manifest="${classes.dir}/org/cny/jtf/main/MANIFEST.MF"
+             file="${build.dir}/jtf-v1.0.0-cny.jar"/>
+    </target>
+    <target name="instrument" depends="pub.jar">
+        <!--
+            Remove the coverage data file and any old instrumentation.
+        -->
+        <delete file="${emma.dir}/metadata.emma"/>
+        <emma enabled="true">
+            <instr instrpathref="run.classpath"
+                   destdir="${instrumented.dir}"
+                   metadatafile="${emma.dir}/metadata.emma"
+                   merge="true">
+                <filter value="-*.test.*"/>
+            </instr>
+        </emma>
+        <copy todir="${classes.dir}" overwrite="true">
+            <fileset dir="${instrumented.dir}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
     </target>
 
-    <!-- ETF -->
-    <target name="jtf.jar" depends="eutil.jar">
-        <mkdir dir="${out.dir}/jtf"/>
-        <!--copy the file to the tmp dire -->
-        <copy overwrite="true" todir="${out.dir}/jtf">
-            <fileset dir="${classes.dir}">
-                <include name="**/jtf/**/*"/>
-                <exclude name="**/test/**/*"/>
-                <exclude name="**/util/**/*"/>
+    <target name="test" depends="init,compile">
+        <junit printsummary="yes" showoutput="yes" fork="yes" forkmode="once" dir="${basedir}"
+               failureProperty="test.failed">
+            <classpath refid="test.classpath"/>
+            <classpath refid="app.classpath"/>
+            <classpath refid="run.classpath"/>
+            <classpath refid="emma.classpath"/>
+            <formatter type="xml"/>
+            <test name="${testcase}" todir="${reports.xml.dir}" if="testcase"/>
+            <batchtest todir="${reports.xml.dir}" unless="testcase">
+                <fileset dir="${src.dir}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+            <jvmarg value="-Demma.coverage.out.file=${emma.dir}/coverage.emma"/>
+            <jvmarg value="-Demma.coverage.out.merge=true"/>
+            <jvmarg value="-XX:-UseSplitVerifier"/>
+        </junit>
+
+        <junitreport todir="${reports.xml.dir}">
+            <fileset dir="${reports.xml.dir}">
+                <include name="TEST-*.xml"/>
             </fileset>
-            <fileset dir="${src.dir}">
-                <include name="**/jtf/**/*"/>
-                <exclude name="**/test/**/*"/>
-                <exclude name="**/util/**/*"/>
-            </fileset>
-        </copy>
-        <jar destfile="${out.dir}/jtf-${author}-${lib.jtf.ver}.jar"
-             manifest="src/org/cny/jtf/MANIFEST.MF"
-             basedir="${out.dir}/jtf">
-        </jar>
-        <mkdir dir="${out.dir}/jtf_p"/>
-        <mkdir dir="${out.dir}/jtf_p/lib"/>
-        <copy overwrite="true" todir="${out.dir}/jtf_p/lib">
-            <fileset dir="${lib.dir}">
-                <include name="poi*"/>
-                <include name="dbunit*"/>
-                <include name="ojdbc*"/>
-                <include name="slf4j*"/>
-                <include name="log4j*"/>
-            </fileset>
-        </copy>
-        <copy overwrite="true" todir="${out.dir}/jtf_p">
-            <fileset dir="${src.dir}/org/cny/jtf/help"/>
-        </copy>
-        <copy overwrite="true" todir="${out.dir}/jtf_p">
-            <fileset dir="${out.dir}">
-                <filename name="jtf-${lib.jtf.ver}.jar"/>
-            </fileset>
-        </copy>
-        <jar destfile="${out.dir}/jtf-${author}-${lib.jtf.ver}.zip"
-             basedir="${out.dir}/jtf_p">
-        </jar>
+            <report format="frames" todir="${reports.html.dir}"/>
+        </junitreport>
     </target>
 
-    <!-- 工程起点 -->
-    <target name="main" depends="jtf.jar">
+
+    <target name="coverage-report" depends="test">
+        <emma enabled="${emma.enabled}">
+            <report sourcepath="${src.dir}"
+                    sort="+block,+name,+method,+class"
+                    metrics="method:70,block:80,line:80,class:100"
+                    >
+                <!-- collect all EMMA data dumps (metadata and runtime)
+                     [this can be done via nested <fileset> fileset elements
+                     or <file> elements pointing to a single file]:
+                -->
+                <fileset dir="${emma.dir}">
+                    <include name="*.emma"/>
+                </fileset>
+
+                <!-- for every type of report desired, configure a nested
+                     element; various report parameters
+                     can be inherited from the parent <report>
+                     and individually overridden for each report type:
+                -->
+                <txt outfile="${emma.dir}/coverage.txt"
+                     depth="package"
+                     columns="class,method,block,line,name"
+                        />
+                <xml outfile="${emma.dir}/coverage.xml"
+                     depth="package"
+                        />
+                <html outfile="${emma.dir}/coverage.html"
+                      depth="method"
+                      columns="name,class,method,block,line"
+                        />
+            </report>
+        </emma>
+    </target>
+
+    <target name="clean" description="Remove all files created by the build/test process.">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="main" depends="clean,compile,instrument,test,coverage-report,pub.jar">
         <echo message="****************************************"/>
         <echo message="*** This is the end of project build ***"/>
         <echo message="****************************************"/>

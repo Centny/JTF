@@ -1,9 +1,5 @@
 package org.cny.jtf;
 
-import java.io.OutputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -11,6 +7,10 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.excel.XlsDataSetWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 /**
  * @author Centny

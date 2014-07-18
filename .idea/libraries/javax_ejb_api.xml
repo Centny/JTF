@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="javax.ejb-api">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/javax.ejb-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javax.servlet.jsp_2.0.0.v201101211617.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javax.servlet_3.0.0.v201112011016.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
